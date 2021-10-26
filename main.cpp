@@ -1,44 +1,16 @@
-#include <windows.h>
+#include "model.hpp"
 
-LRESULT __stdcall WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+Vec2i size_screen(1000, 800);
 
-int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow){
-    WNDCLASS windowClass = { 0 };
-    windowClass.lpfnWndProc = WindowProc;
-    windowClass.hInstance = hInstance;
-    windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-    windowClass.lpszClassName = TEXT("RENDERER");
-    RegisterClass(&windowClass);
-
-    HWND hwnd = CreateWindow(
-    windowClass.lpszClassName,
-    TEXT("Окно рендера модели"),
-    WS_OVERLAPPEDWINDOW,
-    0, 0,
-    1000, 800,
-    nullptr, nullptr,
-    hInstance, nullptr);
-
-    ShowWindow(hwnd, nCmdShow);
-    UpdateWindow(hwnd);
-
-  MSG msg = {};
-    while (msg.message != WM_QUIT){
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
-    return 0;
-}
+// Model* model = new Model("../obj/airpods");
+Model* model = new Model("../obj/man", size_screen);
 
 LRESULT __stdcall WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
     static PAINTSTRUCT ps;
     static RECT Rect;
     static HDC hdc, hCmpDC;
     static HBITMAP hBmp;
-
+            
     switch (message)
     {
         case WM_PAINT:
@@ -61,7 +33,7 @@ LRESULT __stdcall WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             
             // Здесь рисуем на контексте hCmpDC
             ////////////////////////////////////////////////////////////////////////////////////////////////////
-            // model->draw(hCmpDC);
+            model->draw(hCmpDC);
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             // Копируем изображение из теневого контекста на экран
             SetStretchBltMode(hdc, COLORONCOLOR);
@@ -75,10 +47,40 @@ LRESULT __stdcall WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         break;
 
         case WM_DESTROY:
-        // delete model;
-        PostQuitMessage(0);
+            delete model;
+            PostQuitMessage(0);
         return 0;
     }
 
     return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow){
+    WNDCLASS windowClass = { 0 };
+    windowClass.lpfnWndProc = WindowProc;
+    windowClass.hInstance = hInstance;
+    windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    windowClass.lpszClassName = TEXT("RENDERER");
+    RegisterClass(&windowClass);
+
+    HWND hwnd = CreateWindow(
+    windowClass.lpszClassName,
+    TEXT("Окно рендера модели"),
+    WS_OVERLAPPEDWINDOW,
+    0, 0,
+    size_screen.x, size_screen.y,
+    nullptr, nullptr,
+    hInstance, nullptr);
+
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+
+    MSG msg = {};
+    while (msg.message != WM_QUIT){
+        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)){
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+    }
+    return 0;
 }
