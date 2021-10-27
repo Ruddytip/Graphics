@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "vec.hpp"
 
 struct face{
@@ -6,6 +7,6 @@ struct face{
 };
 
 struct object{
-    std::vector<int> if_f;
+    std::vector<int> id_f;
     std::string nameObject;
 };

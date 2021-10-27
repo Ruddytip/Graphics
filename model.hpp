@@ -1,12 +1,12 @@
 #pragma once
-#include "geometry.hpp"
 #include <windows.h>
 #include <string>
-#include <vector>
+#include "geometry.hpp"
 
 class Model{
 private:
     std::vector<Vec3d> verts;
+    std::vector<face> faces;
     std::vector<object> objects;
     Vec2i size_screen;
     Vec3d size;
@@ -17,6 +17,7 @@ private:
     std::string name_model;
     void obj_parser();
     void mtl_parser();
+    void line(HDC _hdc, Vec2i _p0, Vec2i _p1, COLORREF* color);
 public:
     Model(std::string _str, Vec2i _size_screen);
     ~Model();
