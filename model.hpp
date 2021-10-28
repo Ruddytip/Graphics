@@ -12,6 +12,8 @@ private:
     Vec3d size;
     Vec3d pos;
     Vec3d rot;
+    Vec3d scale;
+    Vec3d min, max;
     double* z_buffer;
     std::string path;
     std::string name_model;
