@@ -1,86 +1,29 @@
-#include "model.hpp"
+#include "BMP.hpp"
+#include "OBJ.hpp"
+#include "Render.hpp"
+#include "Matrix.hpp"
+#include <iostream>
 
-Vec2i size_screen(1000, 800);
+int main(){
+    // const unsigned int w = 1000, h = 1000;
+    // Model model;
+    // OBJ file;
+    // file.downloadModel("models/african_head/source/african_head.obj", model);
+    // // file.downloadModel("models/tennyson/source/model.obj", model);
+    // // file.downloadModel("models/orc/source/model.obj", model);
+    
+    // Canvas image(w, h, Color(0, 0, 0, 0));
 
-// Model* model = new Model("../obj/airpods");
-Model* model = new Model("../obj/man", size_screen);
+    // Render Rout;
+    // Rout.drawIzometricMesh(image, model, 0.5);
 
-LRESULT __stdcall WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
-    static PAINTSTRUCT ps;
-    static RECT Rect;
-    static HDC hdc, hCmpDC;
-    static HBITMAP hBmp;
-            
-    switch (message)
-    {
-        case WM_PAINT:
-            GetClientRect(hWnd, &Rect);
-            hdc = BeginPaint(hWnd, &ps);
+    // BMP out(image);
+    // out.writeToFile("out.bmp");
 
-            // Создание теневого контекста для двойной буферизации
-            hCmpDC = CreateCompatibleDC(hdc);
-            hBmp = CreateCompatibleBitmap(hdc, Rect.right - Rect.left, Rect.bottom - Rect.top);
-            SelectObject(hCmpDC, hBmp);
+    Matrix m(6);
+    m[4][2] = 9;
+    std::cout << m << std::endl;
+    std::cout << !m << std::endl;
 
-            // Закраска фоновым цветом
-            LOGBRUSH br;
-            br.lbStyle = BS_SOLID;
-            br.lbColor = 0x000000;
-            HBRUSH brush;
-            brush = CreateBrushIndirect(&br);
-            FillRect(hCmpDC, &Rect, brush);
-            DeleteObject(brush);
-            
-            // Здесь рисуем на контексте hCmpDC
-            ////////////////////////////////////////////////////////////////////////////////////////////////////
-            model->draw(hCmpDC);
-            ////////////////////////////////////////////////////////////////////////////////////////////////////
-            // Копируем изображение из теневого контекста на экран
-            SetStretchBltMode(hdc, COLORONCOLOR);
-            BitBlt(hdc, 0, 0, Rect.right - Rect.left, Rect.bottom - Rect.top, hCmpDC, 0, 0, SRCCOPY);
-
-            // Удаляем ненужные системные объекты
-            DeleteDC(hCmpDC);
-            DeleteObject(hBmp);
-            hCmpDC = NULL;
-            EndPaint(hWnd, &ps);
-        break;
-
-        case WM_DESTROY:
-            delete model;
-            PostQuitMessage(0);
-        return 0;
-    }
-
-    return DefWindowProc(hWnd, message, wParam, lParam);
-}
-
-int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow){
-    WNDCLASS windowClass = { 0 };
-    windowClass.lpfnWndProc = WindowProc;
-    windowClass.hInstance = hInstance;
-    windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-    windowClass.lpszClassName = TEXT("RENDERER");
-    RegisterClass(&windowClass);
-
-    HWND hwnd = CreateWindow(
-    windowClass.lpszClassName,
-    TEXT("Окно рендера модели"),
-    WS_OVERLAPPEDWINDOW,
-    0, 0,
-    size_screen.x, size_screen.y,
-    nullptr, nullptr,
-    hInstance, nullptr);
-
-    ShowWindow(hwnd, nCmdShow);
-    UpdateWindow(hwnd);
-
-    MSG msg = {};
-    while (msg.message != WM_QUIT){
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)){
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-    }
     return 0;
 }
