@@ -1,10 +1,13 @@
 #include "Model.hpp"
 
-Model::Model(){
+Object::Object(const Vec3d _origin, const Vec3d _scale, const Vec3d _space):
+origin(_origin), scale(_scale), space(_space){}
+void Object::setOrigin(const Vec3d _origin){ origin = _origin; }
+void Object::setScale(const Vec3d _scale){ scale = _scale; }
+void Object::setSpace(const Vec3d _space){ space = _space; }
+
+Model::Model(): Object(Vec3d(.0, .0, .0), Vec3d(1.0, 1.0, 1.0), Vec3d(1.0, 1.0, 1.0)){
     setName("None");
-    setOrigin(Vec3d(.0, .0, .0));
-    setScale(Vec3d(1.0, 1.0, 1.0));
-    setSpace(Vec3d(.0, .0, .0));
     setColor(Color(255, 255, 255, 255));
     texture.clear(Color(255, 255, 255, 255));
     normalMap.clear(Color(255, 255, 255, 255));
@@ -14,9 +17,6 @@ Model::Model(){
 }
 
 void Model::setName(const std::string _name){ name = _name; }
-void Model::setOrigin(const Vec3d _origin){ origin = _origin; }
-void Model::setScale(const Vec3d _scale){ scale = _scale; }
-void Model::setSpace(const Vec3d _space){ space = _space; }
 void Model::setColor(const Color _color){ color = _color; }
 void Model::setTexture(const Canvas _texture){ texture = _texture; }
 void Model::setNormalMap(const Canvas _normalMap){ normalMap = _normalMap; }

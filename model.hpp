@@ -11,12 +11,25 @@ struct Face{
     Vec3ui indexN; // Индексы нормалей
 };
 
-class Model{
+class Object{
 private:
-    std::string name; // Имя
     Vec3d origin; // Расположение центра координат
     Vec3d scale; // Локальные координаты
     Vec3d space; // Локальные углы
+public:
+    // 
+    Object(const Vec3d _origin, const Vec3d _scale, const Vec3d _space);
+    // 
+    void setOrigin(const Vec3d _origin);
+    // 
+    void setScale(const Vec3d _scale);
+    // 
+    void setSpace(const Vec3d _space);
+};
+
+class Model: public Object{
+private:
+    std::string name; // Имя
     std::vector<Vec3d> verts; // Массив вершиных (геометрические координаты)
     std::vector<Vec2d> uv; // Массив текстурных координат
     std::vector<Vec3d> normals; // Массив нормалей

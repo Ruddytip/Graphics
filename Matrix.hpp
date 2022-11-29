@@ -6,6 +6,8 @@ private:
     unsigned int x, y;
     double** data;
 public:
+    // Конструктор через фигурные скобки
+    Matrix(std::initializer_list<std::initializer_list<double>> in);
     // Конструктор нулевой матрицы
     Matrix();
     // Конструктор единичной матрицы
@@ -30,6 +32,8 @@ public:
         }
         return out;
     }
+    // Оператор копирования
+    Matrix& operator=(Matrix& mtr);
     // Оператор сравнения
     bool operator==(Matrix& mtr) const;
     // Оператор сложения

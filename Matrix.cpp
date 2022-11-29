@@ -2,6 +2,16 @@
 
 Matrix::Matrix(): x(0), y(0), data(nullptr){}
 
+Matrix::Matrix(std::initializer_list<std::initializer_list<double>> in):
+Matrix(in.size(), in.begin()->size()){
+
+    for(unsigned int i = 0; i < x; ++i){
+        for(unsigned int j = 0; j < y; ++j){
+            data[i][j] = *((in.begin() + j)->begin() + i);
+        }
+    }
+}
+
 Matrix::Matrix(const unsigned int size): Matrix(size, size){
     for(unsigned int i = 0; i < size; ++i)
         data[i][i] = 1.0;
@@ -27,6 +37,13 @@ Matrix::~Matrix(){
 unsigned int Matrix::getX() const { return x; }
 
 unsigned int Matrix::getY() const { return y; }
+
+Matrix& Matrix::operator=(Matrix& mtr){
+    for(unsigned int j = 0; j < y; ++j)
+        for(unsigned int i = 0; i < x; ++i)
+            data[i][j] = mtr[i][j];
+    return *this;
+}
 
 bool Matrix::operator==(Matrix& mtr) const{
     bool flag = true;

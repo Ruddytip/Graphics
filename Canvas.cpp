@@ -1,4 +1,5 @@
 #include "Canvas.hpp"
+#include <algorithm>
 
 Canvas::Canvas():
 width(0), height(0), canvas(nullptr){}
